@@ -7,8 +7,7 @@ int main(int argc, char * argv[])
   rclcpp::init(argc, argv);
 
   auto avoidance_node = std::make_shared<follow_person
-  ::FollowPersonNode>();
-  
+      ::FollowPersonNode>();
   rclcpp::spin(avoidance_node->get_node_base_interface());
 
   rclcpp::shutdown();

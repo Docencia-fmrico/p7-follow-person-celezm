@@ -46,7 +46,7 @@ Detection2Tf::generate_tf(const vision_msgs::msg::Detection3DArray last_msg)
     transform_.child_frame_id = "target";
     return;
   }
-  
+
   if (last_msg.header.frame_id.empty()) {
     RCLCPP_ERROR(this->get_logger(), "Error: last_msg.header.frame_id is empty!");
     transform_.transform.translation.x = 0.0;
@@ -78,7 +78,9 @@ Detection2Tf::generate_tf(const vision_msgs::msg::Detection3DArray last_msg)
 
   //RCLCPP_INFO(this->get_logger(), "Recibo detección de %s", detection.header.frame_id.c_str());
 
-  if (!std::isnan(position.x) && !std::isinf(position.x) && !std::isnan(position.y) && !std::isinf(position.y) && !std::isnan(position.z) && !std::isinf(position.z)) {
+  if (!std::isnan(position.x) && !std::isinf(position.x) && !std::isnan(position.y) &&
+    !std::isinf(position.y) && !std::isnan(position.z) && !std::isinf(position.z))
+  {
     opt2target_msg.transform.translation.x = position.z;
     opt2target_msg.transform.translation.y = -1 * position.x;
     opt2target_msg.transform.translation.z = -1 * position.y;
@@ -96,7 +98,6 @@ Detection2Tf::generate_tf(const vision_msgs::msg::Detection3DArray last_msg)
       "base_footprint", "camera_link", tf2::TimePointZero);
 
     RCLCPP_INFO(get_logger(), "Obtengo TF");
-    
     tf2::fromMsg(bf2opt_msg.transform, bf2opt);
     tf2::fromMsg(opt2target_msg.transform, opt2target);
 
@@ -109,7 +110,7 @@ Detection2Tf::generate_tf(const vision_msgs::msg::Detection3DArray last_msg)
     transform_.transform = tf2::toMsg(tf_bf2tar);
 
     RCLCPP_INFO(this->get_logger(), "Generated TF 2: [%.2f, %.2f, %.2f]",
-                transform_.transform.translation.x, transform_.transform.translation.y, 
+                transform_.transform.translation.x, transform_.transform.translation.y,
                 transform_.transform.translation.z);
   } else {
     opt2target_msg.transform.translation.x = 0.0;
@@ -117,14 +118,11 @@ Detection2Tf::generate_tf(const vision_msgs::msg::Detection3DArray last_msg)
     opt2target_msg.transform.translation.z = 0.0;
   }
 
-  //break;
-  //}
-
 }
 
 void
 Detection2Tf::publish_tf()
-{  
+{
   if (transform_.header.frame_id.empty()) {
     RCLCPP_ERROR(this->get_logger(), "Error: last_msg.header.frame_id is empty!");
     transform_.transform.translation.x = 0.0;
@@ -137,7 +135,8 @@ Detection2Tf::publish_tf()
 
   if (transform_.transform.translation.x == last_transform_.transform.translation.x &&
     transform_.transform.translation.y == last_transform_.transform.translation.y &&
-    transform_.transform.translation.z == last_transform_.transform.translation.z) {
+    transform_.transform.translation.z == last_transform_.transform.translation.z)
+  {
 
     transform_.transform.translation.x = 0.0;
     transform_.transform.translation.y = 0.0;
@@ -153,5 +152,4 @@ Detection2Tf::publish_tf()
   RCLCPP_INFO(get_logger(), "Antes de publicar");
   tf_broadcaster_->sendTransform(transform_);
 }
-
 }

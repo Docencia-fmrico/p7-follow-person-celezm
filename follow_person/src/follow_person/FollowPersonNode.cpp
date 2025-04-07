@@ -119,6 +119,12 @@ FollowPersonNode::control_cycle()
       vel_lin = std::clamp(vlin_pid_.get_output(dist - 1.0), -0.3, 0.3);
     }
 
+    // En caso de que no detecte persona:
+    if (x == 0.0 && y == 0.0) {
+      vel_rot = std::clamp(0.7, -1.5, 1.5);
+      vel_lin = std::clamp(0.0, -0.3, 0.3);
+    }
+
     geometry_msgs::msg::Twist vel;
     vel.linear.x = vel_lin;
     vel.angular.z = vel_rot;
@@ -142,6 +148,4 @@ FollowPersonNode::control_cycle()
     RCLCPP_WARN_STREAM(get_logger(), "Error in TF odom -> base_footprint [<< " << error << "]");
   }
 }
-
-
 }  //  namespace follow_person
