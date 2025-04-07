@@ -18,6 +18,7 @@
   <depend>visualization_msgs</depend>
   <depend>vision_msgs</depend>
   <depend>yolo_msgs</depend>
+  <depend>rclcpp_lifecycle</depend>
 
   <exec_depend>ros2launch</exec_depend>
   <export>
